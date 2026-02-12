@@ -12,6 +12,9 @@ public class GoblinController : MonoBehaviour
     [Header("States")]
     [SerializeField] private string current_state = "Patrol";
 
+    [Header("MathOperatorReference")]
+    [SerializeField] private GameObject math_system;
+
     private bool can_patrol = true;
 
     private Rigidbody2D my_rb;
@@ -43,6 +46,15 @@ public class GoblinController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Playable"))
+        {
+            Instantiate(math_system, transform.position, Quaternion.identity);
+        }
+
+    }
+
 
     private void Patrolling()
     {
@@ -53,7 +65,7 @@ public class GoblinController : MonoBehaviour
 
 
 
-    private void EnemieDeath()
+    public void EnemieDeath()
     {
 
         Destroy(gameObject);

@@ -8,6 +8,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 5.0f;
     [SerializeField] private float jump_force = 100f;
 
+    public bool can_move = true;
+
     private Rigidbody2D my_rb;
     private Vector2 my_pos;
     private bool is_grounded = true;
@@ -27,10 +29,13 @@ public class PlayerController : MonoBehaviour
 
     private void Movement()
     {
-        float direction_x = Input.GetAxis("Horizontal");
+        if (can_move)
+        {
+            float direction_x = Input.GetAxis("Horizontal");
 
-        my_pos = new Vector2(direction_x, 0f).normalized * speed;
-        my_rb.velocity = my_pos;
+            my_pos = new Vector2(direction_x, 0f).normalized * speed;
+            my_rb.velocity = my_pos;
+        }
     }
 
 
