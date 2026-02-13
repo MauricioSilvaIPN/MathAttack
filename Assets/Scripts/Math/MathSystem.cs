@@ -54,6 +54,7 @@ public class MathSystem : MonoBehaviour
             var player_ref = FindObjectOfType<PlayerController>();
 
             player_ref.can_move = false;
+            player_ref.is_grounded = false;
 
 
             //Matching the correct operator
@@ -91,6 +92,7 @@ public class MathSystem : MonoBehaviour
             var enemie_ref = FindObjectOfType<GoblinController>();
 
             player_ref.can_move = true;
+            player_ref.is_grounded = true;
             enemie_ref.EnemieDeath();
             Destroy(gameObject);
         }

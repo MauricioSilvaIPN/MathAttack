@@ -9,10 +9,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jump_force = 100f;
 
     public bool can_move = true;
+    public bool is_grounded = true;
 
     private Rigidbody2D my_rb;
     private Vector2 my_pos;
-    private bool is_grounded = true;
+
 
     void Start()
     {
