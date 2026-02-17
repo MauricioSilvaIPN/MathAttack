@@ -5,65 +5,69 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private float speed = 5.0f;
-    [SerializeField] private float jump_force = 100f;
+    [SerializeField] private int life = 15;
+    [SerializeField] private int damage = 5;
 
-    public bool can_move = true;
-    public bool is_grounded = true;
+    [SerializeField] private CombatSystem manager_ref;
+    
+    private Animator anim_ref;
 
-    private Rigidbody2D my_rb;
-    private Vector2 my_pos;
-
+    public bool can_attack = false;
 
     void Start()
     {
-        my_rb = GetComponent<Rigidbody2D>();
+        anim_ref = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Movement();
-        Jumping();
+        Attacking();
     }
 
 
-    private void Movement()
-    {
-        if (can_move)
-        {
-            float direction_x = Input.GetAxis("Horizontal");
 
-            my_pos = new Vector2(direction_x, 0f).normalized * speed;
-            my_rb.velocity = my_pos;
+    private void Attacking()
+    {
+        //Attack just when player_attack is true
+        if (can_attack)
+        {
+            anim_ref.Play("Attacking");
         }
     }
 
 
-    private void Jumping()
+    private void Idle()
     {
-        if (Input.GetKey(KeyCode.Space) && is_grounded)
-        {
-            my_pos.y = jump_force / 2;
-            my_rb.velocity = my_pos;
-        }
-    }
+        //Giving the Player params
+        can_attack = false;
+        anim_ref.Play("Idle");
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-        if (collision.gameObject.CompareTag("Chão"))
-        {
-            is_grounded = true;
-        }
+        //Giving the MathControllerParams
+        var combat_ref = FindObjectOfType<CombatSystem>();
+
+        //Telling that math_system returns
+        combat_ref.can_math = false;
     }
 
 
-    private void OnCollisionExit2D(Collision2D collision)
+
+    public void HitDamage(int amount)
     {
-        if (collision.gameObject.CompareTag("Chão"))
+        life -= amount;
+
+        if (life <= 0)
         {
-            is_grounded = false;
+
         }
+
+
+    }
+
+
+    private void DamageEnemie()
+    {
+        var enemie_ref = FindObjectOfType<EnemiesScript>();
+        enemie_ref.HitDamage(damage);
     }
 }

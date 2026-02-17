@@ -35,7 +35,7 @@ public class MathSystem : MonoBehaviour
     {
         if (math_timer > 0f)
         {
-            math_timer -= Time.deltaTime;
+            //math_timer -= Time.deltaTime;
 
             //Creating variables of operations
             int random_number = Random.Range(0, 9);
@@ -46,15 +46,8 @@ public class MathSystem : MonoBehaviour
 
             string current_operator = operators[random_operator];
 
-
             string text_show = string.Concat(number_one, current_operator, number_two);
             operation_text.text = text_show;
-
-            //Detecting player to stop his movement
-            var player_ref = FindObjectOfType<PlayerController>();
-
-            player_ref.can_move = false;
-            player_ref.is_grounded = false;
 
 
             //Matching the correct operator
@@ -86,15 +79,24 @@ public class MathSystem : MonoBehaviour
 
     private void CheckResult()
     {
+        var player_ref = FindObjectOfType<PlayerController>();
+
         if (input_ref.text == result.ToString())
         {
-            var player_ref = FindObjectOfType<PlayerController>();
-            var enemie_ref = FindObjectOfType<GoblinController>();
-
-            player_ref.can_move = true;
-            player_ref.is_grounded = true;
-            enemie_ref.EnemieDeath();
             Destroy(gameObject);
+
+            //Getting the CombatSystem Script to assigned the player attack can be true
+
+            player_ref.can_attack = true;
+        }
+
+        if (input_ref.text != result.ToString())
+        {
+            Destroy(gameObject);
+
+            var enemie_ref = FindObjectOfType<EnemiesScript>();
+
+            enemie_ref.can_attack = true;
         }
     }
 }
