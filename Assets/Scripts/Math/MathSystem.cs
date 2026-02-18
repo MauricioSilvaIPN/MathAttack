@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class MathSystem : MonoBehaviour
 {
-    // Start is called before the first frame update
     private string[] operators = {"+", "-", "/", "x"};
     private int result;
     private float math_timer = 10f;
@@ -18,10 +17,15 @@ public class MathSystem : MonoBehaviour
     [SerializeField] private Text operation_text;
     [SerializeField] private InputField input_ref;
 
+    public int math_level;
+
+    // Start is called before the first frame update
     void Start()
     {
         button_ref.onClick.AddListener(CheckResult);
         MathOperation();
+
+        GetComponent<Canvas>().worldCamera = Camera.main;
     }
 
     // Update is called once per frame
@@ -38,11 +42,10 @@ public class MathSystem : MonoBehaviour
             //math_timer -= Time.deltaTime;
 
             //Creating variables of operations
-            int random_number = Random.Range(0, 9);
             int random_operator = Random.Range(0, operators.Length);
 
-            int number_one = random_number;
-            int number_two = random_number;
+            int number_one = IncreaseDifficult();
+            int number_two = IncreaseDifficult();
 
             string current_operator = operators[random_operator];
 
@@ -80,24 +83,42 @@ public class MathSystem : MonoBehaviour
     private void CheckResult()
     {
         var player_ref = FindObjectOfType<PlayerController>();
+        var enemie_ref = FindObjectOfType<EnemiesScript>();
 
-        if (input_ref.text == result.ToString())
+        if (input_ref.text == result.ToString()) //If result is correct, player attack
         {
             Destroy(gameObject);
-
-            //Getting the CombatSystem Script to assigned the player attack can be true
 
             player_ref.can_attack = true;
         }
 
-        if (input_ref.text != result.ToString())
+        if (input_ref.text != result.ToString()) //If result is incorrect, enemie attack
         {
             Destroy(gameObject);
 
-            var enemie_ref = FindObjectOfType<EnemiesScript>();
-
             enemie_ref.can_attack = true;
         }
+    }
+
+    private int IncreaseDifficult() 
+    {
+        int random_number;
+
+        if (math_level < 5)
+        {
+            Debug.Log(math_level);
+            random_number = Random.Range(1, 10);
+            return random_number;
+        }
+
+        if (math_level > 5)
+        {
+            Debug.Log(math_level);
+            random_number = Random.Range(1, 100);
+            return random_number;
+        }
+
+        return 0;
     }
 }
 

@@ -5,32 +5,41 @@ using UnityEngine;
 public class CombatSystem : MonoBehaviour
 {
     [Header("Objects")]
-    [SerializeField] private PlayerController player_ref;
     [SerializeField] private GameObject math_system;
     [SerializeField] private GameObject[] enemies;
 
-    public bool can_math = false;
-    
+    public bool can_enemie = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        player_ref = FindObjectOfType<PlayerController>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        CombatStart();
+        //CombatStart();
+        GenerateEnemies();
     }
 
 
-    private void CombatStart()
+    public void CombatStart()
     {
-        if (math_system != null && can_math == false) 
+        Instantiate(math_system, transform.position, Quaternion.identity);
+    }
+
+    private void GenerateEnemies()
+    {
+        if (can_enemie)
         {
-            Instantiate(math_system, transform.position, Quaternion.identity);
-            can_math = true;
+            int random_enemie = Random.Range(0, 3);
+            var current_enemie = enemies[random_enemie];
+
+            Instantiate(current_enemie, transform.position, Quaternion.identity);
+
+            can_enemie = false;
         }
     }
 }

@@ -1,30 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] private int life = 15;
     [SerializeField] private int damage = 5;
+    [SerializeField] private int level = 1;
 
+    [SerializeField] private Text level_label;
     [SerializeField] private CombatSystem manager_ref;
     
     private Animator anim_ref;
 
-    public bool can_attack = false;
+    private int experience = 0;
+    private int max_experience = 20;
 
+    public bool can_attack = false;
+    public bool enemie_death = false;
+
+    // Start is called before the first frame update
     void Start()
     {
         anim_ref = GetComponent<Animator>();
+        GetComponentInChildren<Canvas>().worldCamera = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
         Attacking();
+        LevelUp();
+
+        var matho_ref = FindObjectOfType<MathSystem>();
+        if (matho_ref != null)
+        {
+            matho_ref.math_level = level;
+        }
     }
 
+
+    private void LevelUp()
+    {
+        //Increase player level
+        level_label.text = level.ToString();
+
+        if (experience >= max_experience)
+        {
+            level++;
+            max_experience *= 2;
+
+            //Increase math level
+            var matho_ref = FindObjectOfType<MathSystem>();
+            matho_ref.math_level++;
+        }
+
+    }
 
 
     private void Attacking()
@@ -37,7 +69,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void Idle()
+    private void Idle() //Animation Event
     {
         //Giving the Player params
         can_attack = false;
@@ -46,10 +78,18 @@ public class PlayerController : MonoBehaviour
         //Giving the MathControllerParams
         var combat_ref = FindObjectOfType<CombatSystem>();
 
-        //Telling that math_system returns
-        combat_ref.can_math = false;
+        //Generating CombatSystem
+        if (combat_ref.can_enemie == false && enemie_death == false) 
+        { 
+            combat_ref.CombatStart();
+        }
     }
 
+    private void DamageEnemie() //Animation Event
+    {
+        var enemie_ref = FindObjectOfType<EnemiesScript>();
+        enemie_ref.HitDamage(damage);
+    }
 
 
     public void HitDamage(int amount)
@@ -58,16 +98,16 @@ public class PlayerController : MonoBehaviour
 
         if (life <= 0)
         {
-
+            var enemie_ref = FindObjectOfType<EnemiesScript>();
+            enemie_ref.player_death = true;
         }
 
 
     }
 
-
-    private void DamageEnemie()
+    public void AddingEXP(int amount)
     {
-        var enemie_ref = FindObjectOfType<EnemiesScript>();
-        enemie_ref.HitDamage(damage);
+        experience += amount;
     }
+
 }
