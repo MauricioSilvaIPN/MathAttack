@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class MathSystem : MonoBehaviour
 {
     private string[] operators = {"+", "-", "/", "x"};
-    private int result;
+    private float result;
     private float math_timer = 10f;
 
     [Header("InputManagement")]
@@ -17,7 +17,9 @@ public class MathSystem : MonoBehaviour
     [SerializeField] private Text operation_text;
     [SerializeField] private InputField input_ref;
 
-    public int math_level;
+    private int math_level = 0;
+
+    public int max_number = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +33,12 @@ public class MathSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        var player_ref = FindObjectOfType<PlayerController>();
+
+        if (player_ref != null)
+        {
+            math_level = player_ref.level;
+        }
     }
 
 
@@ -44,8 +51,8 @@ public class MathSystem : MonoBehaviour
             //Creating variables of operations
             int random_operator = Random.Range(0, operators.Length);
 
-            int number_one = IncreaseDifficult();
-            int number_two = IncreaseDifficult();
+            int number_one = Random.Range(1, max_number);
+            int number_two = Random.Range(1, max_number);
 
             string current_operator = operators[random_operator];
 
@@ -98,27 +105,6 @@ public class MathSystem : MonoBehaviour
 
             enemie_ref.can_attack = true;
         }
-    }
-
-    private int IncreaseDifficult() 
-    {
-        int random_number;
-
-        if (math_level < 5)
-        {
-            Debug.Log(math_level);
-            random_number = Random.Range(1, 10);
-            return random_number;
-        }
-
-        if (math_level > 5)
-        {
-            Debug.Log(math_level);
-            random_number = Random.Range(1, 100);
-            return random_number;
-        }
-
-        return 0;
     }
 }
 

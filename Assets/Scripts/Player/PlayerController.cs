@@ -7,12 +7,12 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private int life = 15;
     [SerializeField] private int damage = 5;
-    [SerializeField] private int level = 1;
+    [SerializeField] public int level = 1;
 
     [SerializeField] private Text level_label;
-    [SerializeField] private CombatSystem manager_ref;
     
     private Animator anim_ref;
+    private MathSystem math_ref;
 
     private int experience = 0;
     private int max_experience = 20;
@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     {
         anim_ref = GetComponent<Animator>();
         GetComponentInChildren<Canvas>().worldCamera = Camera.main;
+
+        math_ref = FindAnyObjectByType<MathSystem>();
     }
 
     // Update is called once per frame
@@ -32,12 +34,6 @@ public class PlayerController : MonoBehaviour
     {
         Attacking();
         LevelUp();
-
-        var matho_ref = FindObjectOfType<MathSystem>();
-        if (matho_ref != null)
-        {
-            matho_ref.math_level = level;
-        }
     }
 
 
@@ -51,9 +47,6 @@ public class PlayerController : MonoBehaviour
             level++;
             max_experience *= 2;
 
-            //Increase math level
-            var matho_ref = FindObjectOfType<MathSystem>();
-            matho_ref.math_level++;
         }
 
     }

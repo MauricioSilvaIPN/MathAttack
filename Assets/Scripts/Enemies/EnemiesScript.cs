@@ -43,7 +43,6 @@ public class EnemiesScript : MonoBehaviour
         }
 
         //Giving the PlayerController params
-
         var player_ref = FindObjectOfType<PlayerController>();
 
         player_ref.enemie_death = false;

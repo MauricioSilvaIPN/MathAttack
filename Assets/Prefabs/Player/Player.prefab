@@ -205,8 +205,8 @@ MonoBehaviour:
   damage: 5
   level: 1
   level_label: {fileID: 6368077210272676496}
-  manager_ref: {fileID: 43081911559890821, guid: 0ade475aa5721b0498459954bb269d42, type: 3}
   can_attack: 0
+  enemie_death: 0
 --- !u!95 &7192917858075211277
 Animator:
   serializedVersion: 5
@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 400529370880073310}
   - component: {fileID: 6368077210272676496}
   m_Layer: 5
-  m_Name: Text (Legacy)
+  m_Name: LevelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -262,7 +262,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0.6666667, y: 0.1875}
-  m_AnchoredPosition: {x: 0.5999985, y: -0.9000015}
+  m_AnchoredPosition: {x: 0.6000061, y: -0.8999939}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &400529370880073310
