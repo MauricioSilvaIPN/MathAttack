@@ -1,17 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EnemiesScript : MonoBehaviour
 {
     // Start is called before the first frame update
     [Header("Enemie Stats")]
     [SerializeField] private int life = 15;
+    [SerializeField] private int max_life = 15;
     [SerializeField] private int damage = 5;
     [SerializeField] private int exp_gained = 5;
 
+    [Header("UI Components")]
+    [SerializeField] private Image life_bar;
+
     private Animator anim_ref;
-    
+
     public bool can_attack = false;
     public bool player_death = false;
 
@@ -19,7 +24,10 @@ public class EnemiesScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GetComponentInChildren<Canvas>().worldCamera = Camera.main;
+
         anim_ref = GetComponent<Animator>();
+        max_life = life;
 
     }
 
@@ -27,6 +35,8 @@ public class EnemiesScript : MonoBehaviour
     void Update()
     {
         EnemieAttack();
+
+        life_bar.fillAmount = ((float) life / (float) max_life);
     }
 
     private void Idle() //Animation Event

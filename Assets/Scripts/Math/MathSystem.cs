@@ -12,33 +12,33 @@ public class MathSystem : MonoBehaviour
     private float result;
     private float math_timer = 10f;
 
+    private int experience = 5;
+    private int max_number = 9;
+
+    private CombatSystem manager_ref;
+
     [Header("InputManagement")]
     [SerializeField] private Button button_ref;
     [SerializeField] private Text operation_text;
     [SerializeField] private InputField input_ref;
 
-    private int math_level = 0;
-
-    public int max_number = 10;
-
     // Start is called before the first frame update
     void Start()
     {
         button_ref.onClick.AddListener(CheckResult);
-        MathOperation();
 
         GetComponent<Canvas>().worldCamera = Camera.main;
+
+        manager_ref = FindAnyObjectByType<CombatSystem>();
+
+        IncreaseDifficult();
+        MathOperation();
     }
 
     // Update is called once per frame
     void Update()
     {
-        var player_ref = FindObjectOfType<PlayerController>();
 
-        if (player_ref != null)
-        {
-            math_level = player_ref.level;
-        }
     }
 
 
@@ -91,11 +91,18 @@ public class MathSystem : MonoBehaviour
     {
         var player_ref = FindObjectOfType<PlayerController>();
         var enemie_ref = FindObjectOfType<EnemiesScript>();
+       
 
         if (input_ref.text == result.ToString()) //If result is correct, player attack
         {
+            //Adding math experience
+            experience = Random.Range(5, 10);
+            manager_ref.AddingMathEXP(experience);
+
+            //Destroy self
             Destroy(gameObject);
 
+            //Player can attack
             player_ref.can_attack = true;
         }
 
@@ -106,6 +113,18 @@ public class MathSystem : MonoBehaviour
             enemie_ref.can_attack = true;
         }
     }
+
+    private void IncreaseDifficult()
+    {
+        if (manager_ref) 
+        {
+            if (manager_ref.math_level > 5)
+            {
+                max_number *= manager_ref.math_level;
+            }
+        }
+    }
+
 }
 
 

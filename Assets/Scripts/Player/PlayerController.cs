@@ -9,13 +9,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int damage = 5;
     [SerializeField] public int level = 1;
 
+    [Header("UI Components")]
     [SerializeField] private Text level_label;
+    [SerializeField] private Image exp_bar;
+    [SerializeField] private Image life_bar;
     
     private Animator anim_ref;
     private MathSystem math_ref;
 
     private int experience = 0;
     private int max_experience = 20;
+    private int max_life = 15;
 
     public bool can_attack = false;
     public bool enemie_death = false;
@@ -23,6 +27,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        life = max_life;
+
         anim_ref = GetComponent<Animator>();
         GetComponentInChildren<Canvas>().worldCamera = Camera.main;
 
@@ -34,6 +40,8 @@ public class PlayerController : MonoBehaviour
     {
         Attacking();
         LevelUp();
+
+        life_bar.fillAmount = ((float) life / (float) max_life);
     }
 
 
@@ -46,7 +54,10 @@ public class PlayerController : MonoBehaviour
         {
             level++;
             max_experience *= 2;
+            max_life *= 2;
+            life = max_life;
 
+            exp_bar.fillAmount = 0;
         }
 
     }
@@ -101,6 +112,7 @@ public class PlayerController : MonoBehaviour
     public void AddingEXP(int amount)
     {
         experience += amount;
+        exp_bar.fillAmount = ((float) experience / (float) max_experience);
     }
 
 }

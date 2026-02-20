@@ -8,6 +8,11 @@ public class CombatSystem : MonoBehaviour
     [SerializeField] private GameObject math_system;
     [SerializeField] private GameObject[] enemies;
 
+    [Header("Math Stats")]
+    [SerializeField] public int math_level = 1;
+    [SerializeField] private int math_exp = 0;
+    private int max_exp = 20;
+
     public bool can_enemie = false;
 
 
@@ -20,8 +25,8 @@ public class CombatSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //CombatStart();
         GenerateEnemies();
+        CombatLevelUp();
     }
 
 
@@ -29,6 +34,7 @@ public class CombatSystem : MonoBehaviour
     {
         Instantiate(math_system, transform.position, Quaternion.identity);
     }
+
 
     private void GenerateEnemies()
     {
@@ -41,5 +47,21 @@ public class CombatSystem : MonoBehaviour
 
             can_enemie = false;
         }
+    }
+
+
+    private void CombatLevelUp()
+    {
+        if (math_exp > max_exp)
+        {
+            math_level++;
+            max_exp *= 2;
+        }
+    }
+
+
+    public void AddingMathEXP(int amount) 
+    {
+        math_exp += amount;
     }
 }
