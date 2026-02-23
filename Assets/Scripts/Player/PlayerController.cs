@@ -1,15 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Player Stats")]
     [SerializeField] private int life = 15;
     [SerializeField] private int damage = 5;
     [SerializeField] public int level = 1;
 
     [Header("UI Components")]
+    [SerializeField] private Canvas my_canva;
+    [SerializeField] private GameObject ui_stats;
     [SerializeField] private Text level_label;
     [SerializeField] private Image exp_bar;
     [SerializeField] private Image life_bar;
@@ -73,11 +77,15 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void Idle() //Animation Event
+    private void GenerateMathSystem() //Animation Event
     {
         //Giving the Player params
         can_attack = false;
         anim_ref.Play("Idle");
+
+        //Visible Canva
+        SettingAlpha(true, 1f);
+
 
         //Giving the MathControllerParams
         var combat_ref = FindObjectOfType<CombatSystem>();
@@ -89,6 +97,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    private void StayIdle()
+    {
+        //Visible Canva
+        SettingAlpha(true, 1f);
+    }
+
+
+
     private void DamageEnemie() //Animation Event
     {
         var enemie_ref = FindObjectOfType<EnemiesScript>();
@@ -96,9 +113,27 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    public void SettingAlpha(bool checking, float alpha)
+    {
+        ui_stats.GetComponent<Renderer>().enabled = checking;
+
+        Transform parentTransform = my_canva.transform;
+        foreach (Transform child in parentTransform)
+        {
+            CanvasRenderer canva_sprite = child.GetComponent<CanvasRenderer>();
+            if (canva_sprite != null)
+            {
+                canva_sprite.SetAlpha(alpha);
+            }
+        }
+    }
+
+
     public void HitDamage(int amount)
     {
         life -= amount;
+
+        anim_ref.Play("Hurt");
 
         if (life <= 0)
         {

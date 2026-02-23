@@ -14,6 +14,8 @@ public class EnemiesScript : MonoBehaviour
 
     [Header("UI Components")]
     [SerializeField] private Image life_bar;
+    [SerializeField] private Canvas my_canva;
+    [SerializeField] private GameObject ui_stats;
 
     private Animator anim_ref;
 
@@ -24,9 +26,10 @@ public class EnemiesScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        anim_ref = GetComponent<Animator>();
+
         GetComponentInChildren<Canvas>().worldCamera = Camera.main;
 
-        anim_ref = GetComponent<Animator>();
         max_life = life;
 
     }
@@ -39,10 +42,12 @@ public class EnemiesScript : MonoBehaviour
         life_bar.fillAmount = ((float) life / (float) max_life);
     }
 
-    private void Idle() //Animation Event
+    private void GenerateMathSystem() //Animation Event
     {
         anim_ref.Play("EnemieIdle");
         can_attack = false;
+        
+        SettingAlpha(true, 1f);
 
         //Giving the MathControllerParams
         var combat_ref = FindObjectOfType<CombatSystem>();
@@ -59,6 +64,13 @@ public class EnemiesScript : MonoBehaviour
     }
 
 
+    private void StayIdle()
+    {
+        SettingAlpha(true, 1f);
+    }
+
+
+
     public void EnemieAttack()
     {
         if (can_attack)
@@ -70,11 +82,28 @@ public class EnemiesScript : MonoBehaviour
 
     public void HitDamage(int amount)
     {
+        anim_ref.Play("EnemieHurt");
+
         life -= amount;
 
         EnemieDeath();
     }
 
+
+    public void SettingAlpha(bool checking, float alpha)
+    {
+        ui_stats.GetComponent<Renderer>().enabled = checking;
+
+        Transform parentTransform = my_canva.transform;
+        foreach (Transform child in parentTransform)
+        {
+            CanvasRenderer canva_sprite = child.GetComponent<CanvasRenderer>();
+            if (canva_sprite != null)
+            {
+                canva_sprite.SetAlpha(alpha);
+            }
+        }
+    }
 
     public void EnemieDeath()
     {

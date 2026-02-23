@@ -8,9 +8,11 @@ using UnityEngine.UI;
 
 public class MathSystem : MonoBehaviour
 {
+    [SerializeField] private float math_timer = 10f;
+
     private string[] operators = {"+", "-", "/", "x"};
     private float result;
-    private float math_timer = 10f;
+    private float max_timer = 10f;
 
     private int experience = 5;
     private int max_number = 9;
@@ -19,6 +21,7 @@ public class MathSystem : MonoBehaviour
 
     [Header("InputManagement")]
     [SerializeField] private Button button_ref;
+    [SerializeField] private Image timer_bar;
     [SerializeField] private Text operation_text;
     [SerializeField] private InputField input_ref;
 
@@ -26,6 +29,7 @@ public class MathSystem : MonoBehaviour
     void Start()
     {
         button_ref.onClick.AddListener(CheckResult);
+        math_timer = max_timer;
 
         GetComponent<Canvas>().worldCamera = Camera.main;
 
@@ -38,7 +42,11 @@ public class MathSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        MathTimeOut();
 
+        math_timer -= Time.deltaTime;
+
+        timer_bar.fillAmount = ((float) math_timer / (float) max_timer);
     }
 
 
@@ -46,8 +54,6 @@ public class MathSystem : MonoBehaviour
     {
         if (math_timer > 0f)
         {
-            //math_timer -= Time.deltaTime;
-
             //Creating variables of operations
             int random_operator = Random.Range(0, operators.Length);
 
@@ -87,6 +93,25 @@ public class MathSystem : MonoBehaviour
         }
     }
 
+    private void MathTimeOut()
+    {
+        var player_ref = FindAnyObjectByType<PlayerController>();
+        var enemie_ref = FindAnyObjectByType<EnemiesScript>();
+
+        if (math_timer <= 0)
+        {
+            //Setting UI Enemie and Player off
+            enemie_ref.SettingAlpha(false, 0f);
+            player_ref.SettingAlpha(false, 0f);
+
+            Destroy(gameObject);
+
+            enemie_ref.can_attack = true;
+        }
+    }
+
+
+
     private void CheckResult()
     {
         var player_ref = FindObjectOfType<PlayerController>();
@@ -104,10 +129,18 @@ public class MathSystem : MonoBehaviour
 
             //Player can attack
             player_ref.can_attack = true;
+
+            //Setting UI Enemie and Player off
+            enemie_ref.SettingAlpha(false, 0f);
+            player_ref.SettingAlpha(false, 0f);
         }
 
         if (input_ref.text != result.ToString()) //If result is incorrect, enemie attack
         {
+            //Setting UI Enemie and Player off
+            enemie_ref.SettingAlpha(false, 0f);
+            player_ref.SettingAlpha(false, 0f);
+
             Destroy(gameObject);
 
             enemie_ref.can_attack = true;

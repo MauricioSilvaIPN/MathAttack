@@ -13,6 +13,11 @@ public class CombatSystem : MonoBehaviour
     [SerializeField] private int math_exp = 0;
     private int max_exp = 20;
 
+    [Header("Record Stats")]
+    [SerializeField] private int points = 0;
+    [SerializeField] private int correct_answers = 0;
+    [SerializeField] private int incorrect_answers = 0;
+
     public bool can_enemie = false;
 
 
