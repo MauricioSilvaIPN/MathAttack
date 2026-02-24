@@ -100,13 +100,16 @@ public class MathSystem : MonoBehaviour
 
         if (math_timer <= 0)
         {
+            //Adding incorrects answers points
+            manager_ref.AddIncorrectAnswers(1);
+
             //Setting UI Enemie and Player off
             enemie_ref.SettingAlpha(false, 0f);
             player_ref.SettingAlpha(false, 0f);
 
             Destroy(gameObject);
 
-            enemie_ref.can_attack = true;
+            enemie_ref.GetComponent<Animator>().SetBool("Can_Attack", true);
         }
     }
 
@@ -120,15 +123,17 @@ public class MathSystem : MonoBehaviour
 
         if (input_ref.text == result.ToString()) //If result is correct, player attack
         {
-            //Adding math experience
+            //Adding math experience and correct_answers points
             experience = Random.Range(5, 10);
             manager_ref.AddingMathEXP(experience);
+
+            manager_ref.AddCorrectAnswers(1);
 
             //Destroy self
             Destroy(gameObject);
 
             //Player can attack
-            player_ref.can_attack = true;
+            player_ref.GetComponent<Animator>().SetBool("Can_Attack", true);
 
             //Setting UI Enemie and Player off
             enemie_ref.SettingAlpha(false, 0f);
@@ -137,21 +142,25 @@ public class MathSystem : MonoBehaviour
 
         if (input_ref.text != result.ToString()) //If result is incorrect, enemie attack
         {
+            //Adding incorrects answers points
+            manager_ref.AddIncorrectAnswers(1);
+
             //Setting UI Enemie and Player off
             enemie_ref.SettingAlpha(false, 0f);
             player_ref.SettingAlpha(false, 0f);
 
             Destroy(gameObject);
 
-            enemie_ref.can_attack = true;
+            enemie_ref.GetComponent<Animator>().SetBool("Can_Attack", true);
         }
     }
+
 
     private void IncreaseDifficult()
     {
         if (manager_ref) 
         {
-            if (manager_ref.math_level > 5)
+            if (manager_ref.math_level >= 5)
             {
                 max_number *= manager_ref.math_level;
             }

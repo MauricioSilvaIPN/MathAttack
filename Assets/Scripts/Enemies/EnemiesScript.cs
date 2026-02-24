@@ -17,9 +17,12 @@ public class EnemiesScript : MonoBehaviour
     [SerializeField] private Canvas my_canva;
     [SerializeField] private GameObject ui_stats;
 
+    [Header("Sounds")]
+    [SerializeField] private AudioClip damage_fx;
+    [SerializeField] private AudioClip death_fx;
+
     private Animator anim_ref;
 
-    public bool can_attack = false;
     public bool player_death = false;
 
 
@@ -37,16 +40,14 @@ public class EnemiesScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        EnemieAttack();
-
         life_bar.fillAmount = ((float) life / (float) max_life);
     }
 
+
     private void GenerateMathSystem() //Animation Event
     {
-        anim_ref.Play("EnemieIdle");
-        can_attack = false;
-        
+        anim_ref.SetBool("Can_Attack", false);
+
         SettingAlpha(true, 1f);
 
         //Giving the MathControllerParams
@@ -70,19 +71,11 @@ public class EnemiesScript : MonoBehaviour
     }
 
 
-
-    public void EnemieAttack()
-    {
-        if (can_attack)
-        {
-            anim_ref.Play("EnemieAttack");
-        }
-    }
-
-
-    public void HitDamage(int amount)
+    public void HurtDamage(int amount)
     {
         anim_ref.Play("EnemieHurt");
+
+        AudioSource.PlayClipAtPoint(damage_fx, new Vector3(0f, 0f, -10f));
 
         life -= amount;
 
@@ -105,10 +98,14 @@ public class EnemiesScript : MonoBehaviour
         }
     }
 
-    public void EnemieDeath()
+
+    private void EnemieDeath()
     {
         if (life <= 0)
         {
+            //PlayAudio
+            AudioSource.PlayClipAtPoint(death_fx, new Vector3(0f, 0f, -10f));
+
             //Destroy enemie
             Destroy(gameObject);
 
@@ -130,7 +127,7 @@ public class EnemiesScript : MonoBehaviour
     private void DamageEnemie() //Animation Event
     {
         var player_ref = FindObjectOfType<PlayerController>();
-        player_ref.HitDamage(damage);
+        player_ref.HurtDamage(damage);
     }
 }
 

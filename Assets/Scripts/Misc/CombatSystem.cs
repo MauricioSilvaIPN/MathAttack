@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CombatSystem : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class CombatSystem : MonoBehaviour
     }
 
 
-    public void CombatStart()
+    public void CombatStart() //Instance Math Operation
     {
         Instantiate(math_system, transform.position, Quaternion.identity);
     }
@@ -43,10 +44,11 @@ public class CombatSystem : MonoBehaviour
 
     private void GenerateEnemies()
     {
-        if (can_enemie)
+        if (can_enemie) //If enemie is dead
         {
             int random_enemie = Random.Range(0, 3);
             var current_enemie = enemies[random_enemie];
+            points += Random.Range(5, 10);
 
             Instantiate(current_enemie, transform.position, Quaternion.identity);
 
@@ -65,8 +67,28 @@ public class CombatSystem : MonoBehaviour
     }
 
 
-    public void AddingMathEXP(int amount) 
+    public void AddingMathEXP(int amount) //Add Math EXP
     {
         math_exp += amount;
+    }
+
+
+    public void AddCorrectAnswers(int amount) //Add Correct Answers
+    {
+        correct_answers += amount;
+    }
+
+
+    public void AddIncorrectAnswers(int amount) //Add Incorrect Answers
+    {
+        incorrect_answers += amount;
+    }
+
+
+    public void ShowRecord(Text text01, Text text02, Text text03)
+    {
+        text01.text = points.ToString();
+        text02.text = correct_answers.ToString();
+        text03.text = incorrect_answers.ToString();
     }
 }

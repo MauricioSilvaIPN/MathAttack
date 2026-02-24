@@ -293,7 +293,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.016250001, y: 0.95300007}
   m_AnchorMax: {x: 0.135, y: 0.98700005}
-  m_AnchoredPosition: {x: 31.1, y: -27.5}
+  m_AnchoredPosition: {x: 31.100006, y: -27.5}
   m_SizeDelta: {x: 65, y: 14}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7295598463119664476
@@ -528,7 +528,8 @@ MonoBehaviour:
   life_bar: {fileID: 3575729050935525821}
   my_canva: {fileID: 8424519158506287741}
   ui_stats: {fileID: 7863255346293515561}
-  can_attack: 0
+  damage_fx: {fileID: 8300000, guid: 4df288ef04aea9a4dae7204c92bf45c4, type: 3}
+  death_fx: {fileID: 8300000, guid: 11ac220a5ac2d81449c3476ef8d0b339, type: 3}
   player_death: 0
 --- !u!95 &7607278759927986960
 Animator:
