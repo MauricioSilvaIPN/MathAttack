@@ -8,12 +8,14 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private Button play_button;
     [SerializeField] private Button credits_button;
+    [SerializeField] private Button quit_button;
 
     // Start is called before the first frame update
     void Start()
     {
         play_button.onClick.AddListener(PlayGame);
         credits_button.onClick.AddListener(CreditsUI);
+        quit_button.onClick.AddListener(ExitGame);
     }
 
     // Update is called once per frame
@@ -32,4 +34,10 @@ public class UIManager : MonoBehaviour
     {
         SceneManager.LoadScene(1);
     }
+
+    private void ExitGame() 
+    { 
+        Application.Quit();
+    }
+
 }

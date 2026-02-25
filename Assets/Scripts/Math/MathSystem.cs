@@ -163,6 +163,7 @@ public class MathSystem : MonoBehaviour
             if (manager_ref.math_level >= 5)
             {
                 max_number *= manager_ref.math_level;
+                operators = new string[] {"+", "-", "x"};
             }
         }
     }
